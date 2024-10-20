@@ -8,19 +8,18 @@ type CalendarProps = {
 
 export default function Calendar(props: CalendarProps) {
   const currentDate = new Date();
-  let monthName = new Date(
-    currentDate.getFullYear(),
-    props.month,
-    currentDate.getDate()
-  ).toLocaleDateString("default", {
+  let baseDate = new Date(currentDate.getFullYear(), props.month + 1, 0);
+  let monthName = baseDate.toLocaleDateString("default", {
     month: "long",
     year: "numeric",
   });
-  let daysInMonth = new Date(
+  let daysInMonth = baseDate.getDate();
+  let startingDay = new Date(
     currentDate.getFullYear(),
     props.month,
-    0
-  ).getDate();
+    1
+  ).getDay();
+  console.log(startingDay);
 
   return (
     <View className="border overflow-hidden rounded-lg border-gray-600 border-solid">
@@ -47,15 +46,17 @@ export default function Calendar(props: CalendarProps) {
         </TouchableOpacity>
       </View>
       <FlatList
-        data={Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`)}
+        data={Array.from(
+          { length: daysInMonth + startingDay },
+          (_, i) => `${i + 1 - startingDay}`
+        )}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item}</Text>
+          <View className="w-12" style={+item <= 0 ? { opacity: 0 } : {}}>
+            <Text className="text-center p-3 text-lg">{item}</Text>
           </View>
         )}
         keyExtractor={(item, index) => index.toString()}
         numColumns={7}
-        columnWrapperStyle={{ justifyContent: "space-between" }}
       />
     </View>
   );

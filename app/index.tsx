@@ -34,7 +34,7 @@ export default function Index() {
           Hi, {name}!
         </Text>
         <View className="bg-gray-50 flex-1 w-full rounded-t-3xl mt-8 p-6">
-          <Calendar month={0}></Calendar>
+          <Calendar month={8}></Calendar>
         </View>
       </ImageBackground>
     </View>
