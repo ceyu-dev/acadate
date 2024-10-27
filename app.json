@@ -2,15 +2,16 @@
   "expo": {
     "name": "Acadate",
     "slug": "acadate",
-    "version": "1.0.0",
+    "version": "0.1.0-alpha",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "backgroundColor": "#685ab3",
     "splash": {
       "image": "./assets/images/acadate-splash.png",
       "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#685ab3"
     },
     "ios": {
       "supportsTablet": true
@@ -19,18 +20,22 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.yuansdev.acadate"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/logo.png"
     },
-    "plugins": [
-      "expo-router"
-    ],
+    "plugins": ["expo-router"],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "b075cc94-ad98-4540-8fe8-92408c256213"
+      }
     }
   }
 }
