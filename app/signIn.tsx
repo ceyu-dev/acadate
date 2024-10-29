@@ -1,5 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import { supabaseClient } from "@/lib/supabase";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { Fragment, useState } from "react";
 import {
@@ -116,7 +117,7 @@ export default function SignInScreen() {
             {errorMessage}
           </Text>
         </View>
-        <View className="pt-4 justify-center items-center gap-2">
+        <View className="pt-4 justify-center items-center gap-2  ">
           <TouchableOpacity
             onPress={handleSignIn}
             className="bg-text py-2 px-4 flex-row rounded-lg justify-center items-center"
@@ -126,8 +127,9 @@ export default function SignInScreen() {
               color={Colors.accent}
               className={`pr-2 ${isLoading ? "" : "hidden"}`}
             ></ActivityIndicator>
-            <Text style={{ fontFamily: "PoppinsBold" }}>Sign in</Text>
+            <Text style={{ fontFamily: "Poppins" }}>Sign in</Text>
           </TouchableOpacity>
+
           <Text className="text-text pt-4" style={{ fontFamily: "Poppins" }}>
             Don't have an account?
           </Text>
@@ -137,7 +139,7 @@ export default function SignInScreen() {
             }}
             className="bg-transparent border border-text py-2 px-4 rounded-lg justify-center items-center"
           >
-            <Text style={{ fontFamily: "PoppinsBold" }} className="text-text">
+            <Text style={{ fontFamily: "Poppins" }} className="text-text">
               Sign up for free!
             </Text>
           </TouchableOpacity>

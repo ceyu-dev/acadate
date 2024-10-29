@@ -48,7 +48,7 @@ export default function GetStartedPage() {
           }}
           className="bg-text py-2 px-4 rounded-lg justify-center items-center"
         >
-          <Text style={{ fontFamily: "PoppinsBold" }}>Sign up for free!</Text>
+          <Text style={{ fontFamily: "Poppins" }}>Sign up for free!</Text>
         </TouchableOpacity>
         <Text className="text-text" style={{ fontFamily: "Poppins" }}>
           or
@@ -59,7 +59,7 @@ export default function GetStartedPage() {
           }}
           className="bg-transparent border border-text py-2 px-4 rounded-lg justify-center items-center"
         >
-          <Text style={{ fontFamily: "PoppinsBold" }} className="text-text">
+          <Text style={{ fontFamily: "Poppins" }} className="text-text">
             Sign in
           </Text>
         </TouchableOpacity>

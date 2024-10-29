@@ -23,7 +23,24 @@ export default function RootLayout() {
       <Stack.Screen name="getStarted" options={{ headerShown: false }} />
       <Stack.Screen name="signUp" options={{ headerShown: false }} />
       <Stack.Screen name="signIn" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="editUser"
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          animation: "fade",
+        }}
+      />
+      <Stack.Screen
+        name="monthPicker"
+        options={{
+          headerShown: false,
+          presentation: "transparentModal",
+          animation: "fade",
+        }}
+      />
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
       <Stack.Screen name="+not-found" />
     </Stack>
   );

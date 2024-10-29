@@ -1,15 +1,11 @@
 import { Colors } from "@/constants/Colors";
-import { YearCalendar, UniversityCalendar } from "@/lib/calendar";
-import React, { memo, useCallback, useMemo } from "react";
+import { YearCalendar, UniversityCalendar, isSchoolDay } from "@/lib/calendar";
+import React, { useMemo } from "react";
 import { Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
-  BounceInDown,
-  BounceInUp,
-  FadeIn,
-  ReduceMotion,
+  LinearTransition,
   SlideInDown,
-  SlideOutDown,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -26,99 +22,82 @@ interface DayProps {
 
 const Day: React.FC<DayProps> = React.memo(
   ({ item, daysInMonth, daysInPrevMonth, calendars, year, month }) => {
-    function isSchoolDay(date: Date, calendars: YearCalendar[]) {
-      date.setHours(8);
-      for (let i = 0; i < calendars.length; i++) {
-        const calendar = calendars[i];
-
-        if (calendar.year_start > year || calendar.year_end < year) {
-          continue;
-        }
-
-        for (let j = 0; j < calendar.terms.length; j++) {
-          const termStart = new Date(calendar.terms[j].start);
-          const termEnd = new Date(calendar.terms[j].end);
-
-          if (date >= termStart && date <= termEnd) {
-            let isBreak = false;
-
-            for (let k = 0; k < calendar.breaks.length; k++) {
-              const breakStart = new Date(calendar.breaks[k].start);
-              const breakEnd = new Date(calendar.breaks[k].end);
-
-              if (breakStart <= termEnd && breakEnd >= termStart) {
-                if (date >= breakStart && date <= breakEnd) {
-                  isBreak = true;
-                  break;
-                }
-              }
-            }
-
-            if (!isBreak) return true;
-          }
-        }
-      }
-      return false;
-    }
-
     const pressed = useSharedValue<boolean>(false);
-    const tapGesture = Gesture.Tap().onFinalize(() => {
-      //pressed.value = true;
-    });
+
+    // Memoize the display number calculation
+    const displayNumber = useMemo(() => {
+      if (item <= 0) return item + daysInPrevMonth;
+      if (item > daysInMonth) return item - daysInMonth;
+      return item;
+    }, [item, daysInMonth, daysInPrevMonth]);
+
+    // Memoize date object and school day calculations
+    const schoolDayMarkers = useMemo(() => {
+      if (!calendars || item <= 0 || item > daysInMonth) return [];
+
+      const date = new Date(year, month % 12, item);
+      date.setHours(8);
+
+      return calendars.reduce<Array<{ color: string; key: string }>>(
+        (markers, calendar) => {
+          if (isSchoolDay(date, calendar.calendars)) {
+            markers.push({
+              color: calendar.university_color,
+              key: `${item}-${calendar.university_name}`,
+            });
+          }
+          return markers;
+        },
+        []
+      );
+    }, [calendars, item, year, month, daysInMonth]);
+
+    // Memoize styles
+    const baseStyle = useMemo(
+      () => ({
+        opacity: item <= 0 || item > daysInMonth ? 0.2 : 1,
+        flex: 7,
+      }),
+      [item, daysInMonth]
+    );
+
     const animatedStyle = useAnimatedStyle(() => ({
       backgroundColor: pressed.value
         ? withTiming(Colors.accent)
         : "transparent",
     }));
 
-    const markTransition = SlideInDown.duration(300)
-      .dampingRatio(0.1)
-      .randomDelay()
-      .build();
+    const markTransition = useMemo(
+      () => SlideInDown.duration(300).dampingRatio(0.1).randomDelay().build(),
+      []
+    );
 
     return (
-      <GestureDetector gesture={tapGesture}>
-        <Animated.View
-          className="py-1 rounded-lg mx-1 my-1"
-          style={[
-            item <= 0 || item > daysInMonth ? { opacity: 0.2 } : {},
-            { flex: 7 },
-            animatedStyle,
-          ]}
+      <Animated.View
+        className="py-1 rounded-lg mx-1 my-1"
+        style={[baseStyle, animatedStyle]}
+      >
+        <Text
+          style={{ fontFamily: "Poppins" }}
+          className="text-center mx-1 py-1 text-text text-lg"
         >
-          <Text
-            style={{ fontFamily: "Poppins" }}
-            className="text-center mx-1 py-1 text-text text-lg"
-          >
-            {item <= 0
-              ? item + daysInPrevMonth
-              : item > daysInMonth
-              ? item - daysInMonth
-              : item}
-          </Text>
+          {displayNumber}
+        </Text>
+        {schoolDayMarkers.length > 0 && (
           <Animated.View
             entering={markTransition}
             className="absolute items-center bottom-1 w-full justify-center flex-row"
           >
-            {calendars?.map((calendar) => {
-              if (
-                isSchoolDay(
-                  new Date(year, month % 12, item),
-                  calendar.calendars
-                )
-              ) {
-                return (
-                  <View
-                    key={`${item}-${calendar.university_name}`}
-                    className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: calendar.university_color }}
-                  ></View>
-                );
-              }
-            })}
+            {schoolDayMarkers.map(({ color, key }) => (
+              <View
+                key={key}
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: color }}
+              />
+            ))}
           </Animated.View>
-        </Animated.View>
-      </GestureDetector>
+        )}
+      </Animated.View>
     );
   }
 );

@@ -51,7 +51,6 @@ export default function Index() {
     } else if (event === "TOKEN_REFRESHED") {
       // handle token refreshed event
     } else if (event === "USER_UPDATED") {
-      // handle user updated event
     }
   });
   setTimeout(() => {

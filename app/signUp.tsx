@@ -202,7 +202,7 @@ export default function SignUpScreen() {
               color={Colors.accent}
               className={`pr-2 ${isLoading ? "" : "hidden"}`}
             ></ActivityIndicator>
-            <Text style={{ fontFamily: "PoppinsBold" }}>Sign up for free!</Text>
+            <Text style={{ fontFamily: "Poppins" }}>Sign up for free!</Text>
           </TouchableOpacity>
           <Text className="text-text pt-4" style={{ fontFamily: "Poppins" }}>
             Already have an account?
@@ -213,7 +213,7 @@ export default function SignUpScreen() {
             }}
             className="bg-transparent border border-text py-2 px-4 rounded-lg justify-center items-center"
           >
-            <Text style={{ fontFamily: "PoppinsBold" }} className="text-text">
+            <Text style={{ fontFamily: "Poppins" }} className="text-text">
               Sign in
             </Text>
           </TouchableOpacity>

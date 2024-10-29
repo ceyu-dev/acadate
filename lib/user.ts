@@ -4,10 +4,8 @@ import { supabaseClient } from "./supabase";
 let name: String;
 let pendingChange: boolean = false;
 async function getName() {
-  if (!name) {
-    const { data, error } = await supabaseClient.auth.getUser();
-    name = data.user?.user_metadata.display_name;
-  }
+  const { data, error } = await supabaseClient.auth.getUser();
+  name = data.user?.user_metadata.display_name;
   return name;
 }
 

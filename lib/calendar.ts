@@ -1,3 +1,4 @@
+import { act } from "react-test-renderer";
 import { supabaseClient } from "./supabase";
 import { getAddedUniversities } from "./user";
 
@@ -20,6 +21,17 @@ interface Period {
   start: string;
   end: string;
 }
+interface Week {
+  start: Date;
+  end: Date;
+}
+interface ActivePeriods {
+  university_id: number;
+  university_color: string;
+  university_name: string;
+  periods: Period[];
+}
+
 const daysPerMonth = [
   [
     1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
@@ -71,6 +83,120 @@ const daysPerMonth = [
   ], // December
 ];
 
+function getActiveTermsThisMonth(
+  month: number,
+  universityCalendars: UniversityCalendar[]
+): ActivePeriods[] {
+  let today = new Date();
+
+  let activeTerms = universityCalendars.map((universityCalendar) => {
+    let terms = universityCalendar.calendars.flatMap((calendar) => {
+      return calendar.terms.filter((term) => {
+        let termEnd = new Date(term.end);
+        let termStart = new Date(term.start);
+        let endMonth =
+          termEnd.getMonth() +
+          (termEnd.getFullYear() - today.getFullYear()) * 12;
+        let startMonth =
+          termStart.getMonth() +
+          (termStart.getFullYear() - today.getFullYear()) * 12;
+
+        return endMonth >= month && startMonth <= month;
+      });
+    });
+    return {
+      university_id: universityCalendar.university_id,
+      university_color: universityCalendar.university_color,
+      university_name: universityCalendar.university_name,
+      periods: terms,
+    };
+  });
+  return activeTerms.filter((term) => {
+    return term.periods.length != 0;
+  });
+}
+function getActiveBreaksThisMonth(
+  month: number,
+  universityCalendars: UniversityCalendar[]
+): ActivePeriods[] {
+  let today = new Date();
+
+  let activeBreaks = universityCalendars.map((universityCalendar) => {
+    let breaks = universityCalendar.calendars.flatMap((calendar) => {
+      return calendar.breaks.filter((period) => {
+        let periodEnd = new Date(period.end);
+        let periodStart = new Date(period.start);
+        let endMonth =
+          periodEnd.getMonth() +
+          (periodEnd.getFullYear() - today.getFullYear()) * 12;
+        let startMonth =
+          periodStart.getMonth() +
+          (periodStart.getFullYear() - today.getFullYear()) * 12;
+
+        return endMonth >= month && startMonth <= month;
+      });
+    });
+    return {
+      university_id: universityCalendar.university_id,
+      university_color: universityCalendar.university_color,
+      university_name: universityCalendar.university_name,
+      periods: breaks,
+    };
+  });
+  return activeBreaks.filter((breaks) => {
+    return breaks.periods.length != 0;
+  });
+}
+function getSchoolDays(date: Date, universityCalendars: UniversityCalendar[]) {
+  return universityCalendars.filter((universityCalendar) => {
+    return isSchoolDay(date, universityCalendar.calendars);
+  });
+}
+const isSchoolDay = (date: Date, calendars: YearCalendar[]): boolean => {
+  const timestamp = date.getTime();
+
+  return calendars.some((calendar) => {
+    if (
+      calendar.year_start > date.getFullYear() ||
+      calendar.year_end < date.getFullYear()
+    ) {
+      return false;
+    }
+
+    return calendar.terms.some((term) => {
+      const termStart = new Date(term.start).getTime();
+      const termEnd = new Date(term.end).getTime();
+
+      if (timestamp >= termStart && timestamp <= termEnd) {
+        return !calendar.breaks.some((breakPeriod) => {
+          const breakStart = new Date(breakPeriod.start).getTime();
+          const breakEnd = new Date(breakPeriod.end).getTime();
+          return (
+            breakStart <= termEnd &&
+            breakEnd >= termStart &&
+            timestamp >= breakStart &&
+            timestamp <= breakEnd
+          );
+        });
+      }
+      return false;
+    });
+  });
+};
+
+function getWeek(day: Date) {
+  let start = new Date(day.getFullYear(), day.getMonth());
+  let end = new Date(day.getFullYear(), day.getMonth(), 1);
+  let weekday = day.getDay();
+  let date = day.getDate();
+  let week: Week;
+
+  start.setDate(date - weekday);
+  end.setDate(date + (6 - weekday));
+
+  week = { start: start, end: end };
+  return week;
+}
 function getDaysPerMonth(
   daysInMonth: number,
   startingDay: number,
@@ -189,6 +315,8 @@ export {
   UniversityCalendar,
   YearCalendar,
   Period,
+  ActivePeriods,
+  getActiveTermsThisMonth,
   getAllUniversities,
   getUniversitySearchResults,
   getCalendars,
@@ -198,4 +326,8 @@ export {
   daysPerMonth,
   getDaysPerMonth,
   ZellerCongruence,
+  getWeek,
+  isSchoolDay,
+  getSchoolDays,
+  getActiveBreaksThisMonth,
 };
