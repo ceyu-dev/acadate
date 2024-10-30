@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="shortcut icon" href="assets/images/logo.png" type="image/png" />
+
+    <title>Acadate | Your university companion!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="gradient-background flex justify-center items-start w-full">
+      <div class="image-background flex justify-center items-start w-full">
+        <div
+          class="hero p-6 items-center justify-center flex gap-6 flex-col h-screen"
+        >
+          <span class="text font-bold text-3xl flex-col flex"
+            ><span>Seize the day, month, or year!</span>
+            <span class="text-appColor">Time is in your favor.</span>
+          </span>
+          <span class="text flex flex-col"
+            ><span
+              ><span class="app-text text-xl">Acadate</span> is an open-source
+              mobile academic companion.</span
+            >
+            <span
+              >Keep track of your terms, breaks, and important dates with
+              ease.</span
+            >
+          </span>
+          <div class="download-buttons p-4">
+            <div class="android flex gap-2">
+              <a
+                href=""
+                class="download-android font-semibold items-center justify-center text border py-2 px-4 rounded-lg transition-all border-purple-500 bg-appColor"
+                id="download-android"
+                ><ion-icon class="mr-2" name="logo-android"></ion-icon
+                ><span>Download for Android </span
+                ><span class="version" id="version-android"></span
+              ></a>
+              <a
+                href="https://github.com/ceyu-dev/acadate-rn"
+                class="source-android font-semibold items-center justify-center text border py-2 px-4 rounded-lg transition-all border-slate-700 bg-slate-900"
+                id="source-android"
+                ><ion-icon class="mr-2" name="logo-github"></ion-icon>Source</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script
+    type="module"
+    src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+  ></script>
+  <script
+    nomodule
+    src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"
+  ></script>
+  <script src="index.js"></script>
+</html>
