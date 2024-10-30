@@ -1,6 +1,6 @@
 async function initializeAndroidDownload() {
   const githubReleases = await fetch(
-    "https://api.github.com/repos/ceyu-dev/acadate-rn/releases"
+    "https://api.github.com/repos/ceyu-dev/acadate/releases"
   );
 
   githubReleases.json().then((releaseInfo) => {
