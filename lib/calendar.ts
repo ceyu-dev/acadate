@@ -31,57 +31,59 @@ interface ActivePeriods {
   university_name: string;
   periods: Period[];
 }
+interface SpecialDay {
+  name: string,
+  universities: { name: string, color: string }[]
+  non_working_day: boolean
+  date: string
+}
 
-const daysPerMonth = [
-  [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-  ], // January
-  [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28,
-  ], // February (non-leap year)
-  [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-  ], // March
-  [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30,
-  ], // April
-  [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-  ], // May
-  [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30,
-  ], // June
-  [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-  ], // July
-  [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-  ], // August
-  [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30,
-  ], // September
-  [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-  ], // October
-  [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30,
-  ], // November
-  [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
-  ], // December
-];
+export let specialDays: SpecialDay[] | null = null;
+async function loadData() {
+
+  if (!specialDays) {
+    let { data, error } = await supabaseClient.from("special_days").select(`
+      name,
+      universities (
+        name,
+        color
+    ),
+    date,
+    non_working_day
+      `);
+    specialDays = data;
+  }
+}
+function checkIfSpecialDay(date: Date) {
+  date.setHours(0);
+  let s = specialDays;
+  return s?.find((specialDay) => {
+    let specialDayDate = new Date(specialDay.date);
+    specialDayDate.setHours(0);
+
+    if (formatDate(specialDayDate) == formatDate(date)) {
+
+      return true;
+    } else {
+      return false;
+    }
+  });
+}
+function getSpecialDays(date: Date) {
+  date.setHours(0);
+  let s = specialDays;
+  return s?.filter((specialDay) => {
+    let specialDayDate = new Date(specialDay.date);
+    specialDayDate.setHours(0);
+
+    if (formatDate(specialDayDate) == formatDate(date)) {
+
+      return true;
+    } else {
+      return false;
+    }
+  });
+}
 
 function getActiveTermsThisMonth(
   month: number,
@@ -152,8 +154,12 @@ function getSchoolDays(date: Date, universityCalendars: UniversityCalendar[]) {
     return isSchoolDay(date, universityCalendar.calendars);
   });
 }
-const isSchoolDay = (date: Date, calendars: YearCalendar[]): boolean => {
+function isSchoolDay(date: Date, calendars: YearCalendar[]) {
   const timestamp = date.getTime();
+
+  if (checkIfSpecialDay(date)?.non_working_day) {
+    return false;
+  }
 
   return calendars.some((calendar) => {
     if (
@@ -162,6 +168,7 @@ const isSchoolDay = (date: Date, calendars: YearCalendar[]): boolean => {
     ) {
       return false;
     }
+
 
     return calendar.terms.some((term) => {
       const termStart = new Date(term.start).getTime();
@@ -307,7 +314,10 @@ async function getUniversitySearchResults(query: string) {
 async function getAllUniversities() {
   const { data, error } = await supabaseClient
     .from("universities")
-    .select("id,name, logo, color");
+    .select("id,name, logo, color, calendars(id)");
+  if (data) {
+    console.log(data[0].calendars);
+  }
   return data;
 }
 
@@ -323,11 +333,12 @@ export {
   getDatesInRange,
   formatDate,
   isDateInRange,
-  daysPerMonth,
   getDaysPerMonth,
   ZellerCongruence,
   getWeek,
   isSchoolDay,
   getSchoolDays,
   getActiveBreaksThisMonth,
+  loadData,
+  getSpecialDays
 };

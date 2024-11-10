@@ -4,25 +4,33 @@
 :root {
   --appColor: #685ab3;
   --appBackground: #100f17;
+  --appBackgroundTint: #100f1770;
   --lightText: #e4e4e4;
+}
+::selection {
+  background-color: var(--appColor);
+  color: var(--lightText);
+}
+html {
+  scroll-behavior: smooth;
 }
 body {
   background-color: var(--appBackground);
   background-image: url("assets/images/grid_translucent.svg");
 
-  height: 100vh;
   min-height: 100vh;
   width: 100vw;
-  padding: 0;
+
   margin: 0;
   box-sizing: border-box;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
 }
 .gradient-background {
   height: 100%;
-  backdrop-filter: blur(24px);
+  backdrop-filter: blur(32px);
   background: rgb(207, 161, 248);
   background: linear-gradient(
     336deg,
@@ -34,10 +42,12 @@ body {
   height: 100%;
   background-size: 12%;
   background-image: url("assets/images/small_grid.svg");
-  mix-blend-mode: color;
+}
+.hero {
+  height: 85vh;
 }
 .logo {
-  filter: drop-shadow(12px 12px 1px #00000020);
+  filter: drop-shadow(6px 6px 1px #00000020);
 }
 .text {
   font-family: "Poppins", sans-serif;
@@ -53,6 +63,12 @@ body {
 .bg-appColor {
   background-color: var(--appColor);
 }
+.bg-appBackground {
+  background-color: var(--appBackground);
+}
+.bg-appBackgroundTint {
+  background-color: var(--appBackgroundTint);
+}
 .download-android:hover {
   background-color: var(--lightText);
   border-color: black;
@@ -61,4 +77,13 @@ body {
 .source-android:hover {
   border-color: #475569;
   background-color: #1e293b;
+}
+.navigation {
+  backdrop-filter: blur(6px);
+}
+.glow-gradient {
+  background: linear-gradient(rgba(2, 0, 36, 0) 31%, #685ab3a0 100%);
+}
+.subtle-shadow {
+  box-shadow: 0px 0px 24px 4px #100f1770;
 }

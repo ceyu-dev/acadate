@@ -6,6 +6,7 @@ import HomeScreen from "./(tabs)";
 import { supabaseClient } from "@/lib/supabase";
 import { Colors } from "@/constants/Colors";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { loadData } from "@/lib/calendar";
 
 export default function Index() {
   getName();
@@ -53,9 +54,9 @@ export default function Index() {
     } else if (event === "USER_UPDATED") {
     }
   });
-  setTimeout(() => {
+  loadData().then(() => {
     SplashScreen.hideAsync();
-  }, 2000);
+  });
   return (
     <GestureHandlerRootView>
       <View className="bg-accent flex-1 justify-center items-center">

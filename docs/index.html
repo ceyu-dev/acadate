@@ -10,42 +10,107 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
-    <div class="gradient-background flex justify-center items-start w-full">
-      <div class="image-background flex justify-center items-start w-full">
-        <div
-          class="hero p-6 items-center justify-center flex gap-6 flex-col h-screen"
+    <div
+      class="navigation top-0 left-0 fixed flex w-full h-20 z-50 justify-evenly items-center select-none"
+    >
+      <div class="logo h-full flex items-center w-1/3 gap-3 justify-center">
+        <img src="assets/images/logo.png" class="h-2/5 aspect-square" />
+        <span class="title app-text text-3xl">Acadate</span>
+      </div>
+      <div
+        class="navigation-links text w-1/3 h-full flex items-center justify-center gap-4"
+      >
+        <a class="p-4" href="#">Home</a>
+        <a class="p-4" href="#about">About</a>
+        <a class="p-4" href="">Releases</a>
+      </div>
+      <div class="github-button w-1/3 h-full justify-center items-center flex">
+        <a
+          class="text flex items-center justify-center border gap-2 hover:px-8 transition-all border-white py-4 px-6 rounded-lg font-bold"
+          href="https://github.com/ceyu-dev/acadate"
+          ><ion-icon class="mr-2 text-lg" name="logo-github"></ion-icon
+          >GitHub</a
         >
-          <span class="text font-bold text-3xl flex-col flex"
-            ><span>Seize the day, month, or year!</span>
-            <span class="text-appColor">Time is in your favor.</span>
-          </span>
-          <span class="text flex flex-col"
-            ><span
-              ><span class="app-text text-xl">Acadate</span> is an open-source
-              mobile academic companion.</span
+      </div>
+    </div>
+    <div
+      class="gradient-background pb-12 flex-col flex justify-start items-center w-full"
+    >
+      <div
+        class="absolute mix-blend-overlay image-background flex-col flex justify-center items-start w-full"
+      ></div>
+      <div
+        class="hero p-6 z-10 items-center w-full justify-center flex gap-6 flex-col"
+      >
+        <span class="text font-bold text-3xl flex-col flex"
+          ><span>Seize the day, month, or year!</span>
+          <span class="text-appColor">Time is in your favor.</span>
+        </span>
+        <span class="text flex flex-col"
+          ><span
+            ><span class="app-text text-xl">Acadate</span> is an open-source
+            mobile academic companion.</span
+          >
+          <span
+            >Keep track of your terms, breaks, and important dates with
+            ease.</span
+          >
+        </span>
+        <div class="download-buttons p-4">
+          <div class="android flex gap-2">
+            <a
+              href=""
+              class="download-android font-semibold items-center justify-center text border py-2 px-4 rounded-lg transition-all border-purple-500 bg-appColor"
+              id="download-android"
+              ><ion-icon class="mr-2" name="logo-android"></ion-icon
+              ><span>Download for Android </span
+              ><span class="version" id="version-android"></span
+            ></a>
+            <a
+              href="https://github.com/ceyu-dev/acadate"
+              class="source-android flex font-semibold items-center justify-center text border py-2 px-4 rounded-lg transition-all border-slate-700 bg-slate-900"
+              id="source-android"
+              ><ion-icon class="mr-2" name="logo-github"></ion-icon>Source</a
             >
-            <span
-              >Keep track of your terms, breaks, and important dates with
-              ease.</span
+          </div>
+        </div>
+      </div>
+      <div
+        class="about z-10 glow-gradient rounded-xl p-4 flex justify-center w-3/4"
+      >
+        <div
+          class="inner flex items-center flex-col subtle-shadow border border-gray-500 rounded-lg p-16 bg-appBackgroundTint w-full h-full"
+        >
+          <div class="title border-b mb-12 p-4 flex gap-2">
+            <img src="assets/images/logo.png" class="h-8 aspect-square" />
+            <span id="about" class="text font-bold text-2xl"
+              >About <span class="app-text text-3xl">Acadate</span></span
             >
-          </span>
-          <div class="download-buttons p-4">
-            <div class="android flex gap-2">
-              <a
-                href=""
-                class="download-android font-semibold items-center justify-center text border py-2 px-4 rounded-lg transition-all border-purple-500 bg-appColor"
-                id="download-android"
-                ><ion-icon class="mr-2" name="logo-android"></ion-icon
-                ><span>Download for Android </span
-                ><span class="version" id="version-android"></span
-              ></a>
-              <a
-                href="https://github.com/ceyu-dev/acadate"
-                class="source-android font-semibold items-center justify-center text border py-2 px-4 rounded-lg transition-all border-slate-700 bg-slate-900"
-                id="source-android"
-                ><ion-icon class="mr-2" name="logo-github"></ion-icon>Source</a
+          </div>
+          <div class="content w-11/12 gap-4 flex flex-col">
+            <p class="w-full indent-12 text-justify">
+              <span class="text text-lg leading-loose tracking-wide">
+                <span class="app-text font-bold text-xl">Acadate</span> is a
+                <a
+                  class="text-blue-500 hover:text-blue-400 transition-all"
+                  href="https://reactnative.dev/"
+                  target="_blank"
+                  >React Native</a
+                >
+                app that keeps track of your academic calendar so you can plan
+                your trips, dates, and other extracurricular activities ahead of
+                time without needing to open that god-forsaken university
+                portal.
+                <span class="app-text font-bold text-xl">Acadate</span> lets you
+                keep track of multiple university calendars simultaneously. Want
+                to hang out with friends from other universities?
+              </span>
+            </p>
+            <p class="w-full indent-12 text-justify">
+              <span class="font-bold text text-lg italic bg-appColor"
+                >Just check for gaps.</span
               >
-            </div>
+            </p>
           </div>
         </div>
       </div>
